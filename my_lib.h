@@ -14,15 +14,41 @@ using namespace std;
 
 enum CLPointType { LEFT, RIGHT, BEYOND, BEHIND, BETWEEN, ORIGIN, DESTINATION };
 
-struct MyPoint {
-	int x;
-	int y;
+class MyPoint {
+public:
+    double x;
+    double y; 
+
+    MyPoint(double x, double y);
+
+    MyPoint add(const MyPoint& p) const;
+
+    MyPoint sub(const MyPoint& p) const;
+
+    MyPoint multiply(double scalar) const;
+
+    double getX() const;
+
+    double getY() const;
 };
 
-struct Segment {
-	MyPoint p0;
-	MyPoint p1;
+class Polygon {
+public:
+    Polygon(const std::vector<int>& xCoords, const std::vector<int>& yCoords);
+
+    // Method to get the number of vertices
+    int getVertexNum() const;
+
+    MyPoint getVertexCoords(int index) const;
+
+private:
+    std::vector<int> xCoords; 
+    std::vector<int> yCoords;  
 };
+
+Polygon switchOrientation(const Polygon& polygon);
+
+bool isClockWiseOriented(const Polygon& polygon);
 
 const Vec3b BLACK  = { 0, 0, 0 };
 const Vec3b WHITE  = { 255, 255, 255 };   
@@ -38,12 +64,20 @@ void setPixel(int x, int y, Mat& image, Vec3b color);
 
 void fillBackground(Mat& image, Vec3b color);
 
+bool isConvex(const Polygon& polygon);
+
 void DrawBezierCubic(MyPoint& p0, MyPoint& p1, MyPoint& p2, MyPoint& p3, Mat& image, Vec3b color);
+
+void drawPolygon_v2(const Polygon& poly, Mat& image, Vec3b borderColor);
 
 void drawPolygon(const vector<MyPoint>& points, Mat& image, Vec3b borderColor);
 
 void drawLine(int x1, int y1, int x2, int y2, Mat& image, Vec3b color);
 
-void drawCyrusBeckLine(MyPoint& p1, MyPoint& p2, vector<MyPoint>& points, Mat& image);
+MyPoint linePoint(MyPoint p0, MyPoint p1, double t);
+
+void drawCyrusBeckClippedLine(MyPoint p1, MyPoint p2, Polygon polygon, Mat& image);
+
+CLPointType Classify(double x1, double y1, double x2, double y2, double x, double y);
 
 #endif

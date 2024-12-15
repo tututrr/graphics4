@@ -38,29 +38,23 @@ void CyrusBeck() {
 
     fillBackground(cyrusBeckImage, BLACK);
 
-    vector<MyPoint> points = {
-        {100, 200},
-        {100, 500},
-        {200, 650},
-        {300, 700},
-        {400, 600},
-        {450, 400},
-        {400, 200},
-        {200, 150},
-        {100, 200}
-    };
-    Segment s1 = { {50, 250}, {500, 600} }; // Пересекает в 2 точках
-    Segment s2 = { {250, 950}, {300, 900} }; // Полностью вне многоугольника
-    Segment s3 = { {250, 250}, {250, 350} }; // Полностью лежит внутри
-    Segment s4 = { {50, 100}, {200, 300} }; // Пересекает в 1 точке 
-    drawCyrusBeckLine(s1.p0, s1.p1, points, cyrusBeckImage);
-    drawCyrusBeckLine(s2.p0, s2.p1, points, cyrusBeckImage);
-    drawCyrusBeckLine(s3.p0, s3.p1, points, cyrusBeckImage);
-    drawCyrusBeckLine(s4.p0, s4.p1, points, cyrusBeckImage);
+    vector<int> xCoords = {100, 100, 200, 300, 400, 450, 400, 200, 100};
+    vector<int> yCoords = {200, 500, 650, 700, 600, 400, 200, 150, 200};
+    Polygon poly(xCoords, yCoords);
 
-    drawPolygon(points, cyrusBeckImage, MAGENTA);
+    drawLine(50, 600, 500, 600, cyrusBeckImage, MAGENTA); 
+    drawLine(250, 950, 300, 900, cyrusBeckImage, MAGENTA);
+    drawLine(250, 250, 250, 350, cyrusBeckImage, MAGENTA);
+    drawLine(50, 100, 200, 300, cyrusBeckImage, MAGENTA);
 
+    drawCyrusBeckClippedLine(MyPoint(50, 600), MyPoint(500, 600), poly, cyrusBeckImage);// Пересекает в 2 точках
+    drawCyrusBeckClippedLine(MyPoint(250, 950), MyPoint(300, 900), poly, cyrusBeckImage);// Полностью вне многоугольника
+    drawCyrusBeckClippedLine(MyPoint(250, 250), MyPoint(250, 350), poly, cyrusBeckImage);// Полностью лежит внутри
+    drawCyrusBeckClippedLine(MyPoint(50, 100), MyPoint(200, 300), poly, cyrusBeckImage);// Пересекает в 1 точке 
+    
+    drawPolygon_v2(poly, cyrusBeckImage, MAGENTA);
     saveImage(&cyrusBeckImage, "cyrus_beck.png");
+
 }
 
 int main()
